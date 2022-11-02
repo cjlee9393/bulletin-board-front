@@ -1,3 +1,11 @@
+export const boards = [{
+    bid: 1,
+    boardname: 'board1',
+}, {
+    bid: 2,
+    boardname: 'board2',
+}]
+
 export const documents = [{
     did: 1,
     documentname: '김건희, 이태원 참사 유족 끌어안았다 "사고 막지못해 죄송"',

@@ -13,6 +13,10 @@ const ButtonBase = styled.button`
 
     font-weight: bold;
     color: white;
+
+    :hover {
+        cursor: pointer;
+    }
 `
 
 const ImageBox = styled.div`
