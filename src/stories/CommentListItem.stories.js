@@ -1,4 +1,5 @@
 import { CommentListItem } from "../CommentListItem";
+import { comments } from "../data";
 
 export default {
     component: CommentListItem,
@@ -8,5 +9,5 @@ export default {
 export const Basic = (args) => <CommentListItem {...args} />
 
 Basic.args = {
-    commentContent: '난 소설 좋아하는데'
+    comment: comments[0],
 }

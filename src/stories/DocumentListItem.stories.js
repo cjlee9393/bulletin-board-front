@@ -1,4 +1,5 @@
 import { DocumentListItem } from "../DocumentListItem";
+import { documents } from "../data";
 
 export default {
     component: DocumentListItem,
@@ -8,5 +9,5 @@ export default {
 export const Basic = (args) => <DocumentListItem {...args} />
 
 Basic.args = {
-    documentName: 'Storybook default export',
+    document: documents[0],
 }
