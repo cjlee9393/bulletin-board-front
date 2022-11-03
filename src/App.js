@@ -1,29 +1,24 @@
 import './App.css';
-import { DocumentListHeader } from './DocumentListHeader';
-import { DocumentListItem } from './DocumentListItem';
-import { documents } from './data';
+import { NavBar } from './NavBar';
 import { DocumentListPage } from './DocumentListPage';
 import { DocumentPage } from './DocumentPage';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
-function App() {
-  const name = 'test document name';
-  const content = 'some content';
-  const did = 2;
+import { boards, writers } from './data';
 
-  const document = {
-    did: did,
-    documentName: name,
-    content: content
-  }
+function App() {
+  const writer = writers[0];
 
   return (
     <>
       <MemoryRouter initialEntries={['/documents/1']}>
-            <Routes>
-                <Route path={'/documents/:did'} element={<DocumentPage />} />
-            </Routes>
+        <NavBar isLoggedIn={false} boards={boards} />
+        <Routes>
+          <Route exact path={'/'} />
+          <Route exact path={'/boards/:bid'} element={<DocumentListPage writer={writer} />} />
+          <Route exact path={'/documents/:did'} element={<DocumentPage writer={writer} />} />
+        </Routes>
       </MemoryRouter>
     </>
   );

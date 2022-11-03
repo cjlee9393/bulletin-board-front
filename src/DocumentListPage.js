@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { DocumentListHeader } from './DocumentListHeader'; 
 import { DocumentList } from "./DocumentList";
 import { useEffect, useState } from "react";
@@ -8,7 +8,8 @@ import { v4 as uuid } from 'uuid';
 import { NewDocument } from "./NewDocument";
 
 const DocumentListPageBase = styled.div`
-    height: 600px;
+    height: 1000px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -21,17 +22,15 @@ const DocumentListContainer = styled.div`
 `
 
 export const DocumentListPage = ({
-    bid,
-    writer,
+    writer
 }) => {
-    const [documents, setDocuments] = useState(initialDocuments);
+    const { bid } = useParams();
+    const [documents, setDocuments] = useState([]);
     const [isWritingDocument, setIsWritingDocument] = useState(false);
 
-    // useEffect(() => {
-    //     // <to-be-updated>
-    //     setDocuments(initialDocuments);
-        
-    // }, []);
+    useEffect(() => {
+        setDocuments(initialDocuments.filter(document => document.bid === bid));
+    }, [bid]);
 
     const saveDocument = (documentname, content) => {
         const document = {
