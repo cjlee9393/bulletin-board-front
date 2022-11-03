@@ -14,6 +14,10 @@ export const documents = [{
     did: 2,
     documentname: '북, 한미훈련 빌미로 ‘핵 사용’ 위협까지…고조되는 한반도 긴장',
     content: '한-미 연합훈련을 빌미로 북한이 동해 북방한계선(NLL) 이남 공해상으로 탄도미사일을 발사하는 한편, 군 최고 수뇌부를 동원해 핵무기 사용 위협까지 하고 나섰다. 북의 무력시위에 남쪽도 맞대응을 이어갈 수밖에 없는 상황이이서, 7차 핵실험을 비롯한 북한의 전략 도발 가능성과 맞물려 한반도를 둘러싼 군사적 긴장이 더욱 고조될 것으로 보인다.'
+}, {
+    did: 3,
+    documentname: 'Get by HTML element with React Testing Library?',
+    content: 'I\'m using the getByTestId function in React Testing Librarys. Is it possible / advisable to search for HTML elements instead? So something like this?'
 }]
 
 export const comments = [{

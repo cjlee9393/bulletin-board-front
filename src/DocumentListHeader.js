@@ -27,10 +27,13 @@ export const DocumentListHeader = ({ onClickWrite = () => {}, onClickSearch = (s
             <Button buttonText={'글쓰기'} onclick={onClickWrite} />
             <SearchWrap>
                 <SearchTextInput 
+                    role={'input'}
                     placeholder={'검색어'}
-                    onchange={(e) => setSearchText(e.target.value)}
+                    onChange={(e) => setSearchText(e.target.value)}
                 />
-                <Button buttonText={'검색'} onclick={() => onClickSearch(searchText)} />
+                <Button buttonText={'검색'} onclick={() => {
+                    onClickSearch(searchText);
+                }} />
             </SearchWrap>
         </DocumentListHeaderBase>
     )

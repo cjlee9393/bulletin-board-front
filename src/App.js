@@ -2,6 +2,7 @@ import './App.css';
 import { DocumentListHeader } from './DocumentListHeader';
 import { DocumentListItem } from './DocumentListItem';
 import { documents } from './data';
+import { DocumentListPage } from './DocumentListPage';
 
 function App() {
   const name = 'test document name';
@@ -16,7 +17,7 @@ function App() {
 
   return (
     <>
-    <DocumentListItem document={documents[0]} />
+    <DocumentListPage bid={1} />
     </>
   );
 }

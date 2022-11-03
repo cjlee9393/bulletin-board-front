@@ -2,8 +2,7 @@ import styled from "styled-components"
 import { useNavigate } from "react-router-dom"
 
 const DocumentListItemBase = styled.div`
-    background-color: #ccc;
-    width: 800px;
+    background-color: white;
     height: 40px;
 
     display: flex;

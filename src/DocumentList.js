@@ -4,7 +4,7 @@ export const DocumentList = ({ documents }) => {
     return (
         <>
         {documents.map(document => (
-            <DocumentListItem document={document} />
+            <DocumentListItem key={document.did} document={document} />
         ))}
         </>
     )
