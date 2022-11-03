@@ -3,7 +3,7 @@ import { writers } from '../data';
 
 export default {
     component: NewComment,
-    title: 'Atoms/NewComment'
+    title: 'Molecules/NewComment'
 }
 
 export const Basic = (args) => <NewComment {...args} />

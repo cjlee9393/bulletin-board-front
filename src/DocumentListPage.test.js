@@ -3,15 +3,15 @@ import { screen, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history'
 import { renderWithRouter } from './test-utils/renderers'
 
-test('Click on \'글쓰기\' button should navigate to \'write-document/:bid\'', () => {
+test('Click on \'글쓰기\' button should show NewDocument component', () => {
     const bid = 1;
     const fakeHistory = createMemoryHistory();
 
     renderWithRouter(<DocumentListPage bid={bid} />, fakeHistory);
   
     fireEvent.click(screen.getByText(/글쓰기/i));
-  
-    expect(fakeHistory.location.pathname).toEqual(`/write-document/${bid}`);
+
+    expect(screen.queryByText('제목')).toBeInTheDocument()
 });
 
 test('Click on search button should only display documents containing searchText', () => {

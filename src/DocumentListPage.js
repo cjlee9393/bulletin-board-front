@@ -4,6 +4,8 @@ import { DocumentList } from "./DocumentList";
 import { useEffect, useState } from "react";
 import { documents as initialDocuments } from './data';
 import styled from "styled-components";
+import { v4 as uuid } from 'uuid';
+import { NewDocument } from "./NewDocument";
 
 const DocumentListPageBase = styled.div`
     height: 600px;
@@ -19,10 +21,11 @@ const DocumentListContainer = styled.div`
 `
 
 export const DocumentListPage = ({
-    bid
+    bid,
+    writer,
 }) => {
-    const navigate = useNavigate();
     const [documents, setDocuments] = useState(initialDocuments);
+    const [isWritingDocument, setIsWritingDocument] = useState(false);
 
     // useEffect(() => {
     //     // <to-be-updated>
@@ -30,13 +33,28 @@ export const DocumentListPage = ({
         
     // }, []);
 
+    const saveDocument = (documentname, content) => {
+        const document = {
+            did: uuid(),
+            documentname: documentname,
+            content: content,
+        }
+
+        setDocuments([...documents, document]);
+        setIsWritingDocument(false);
+    }
+
     return (
         <DocumentListPageBase>
+            {isWritingDocument && 
+                <NewDocument
+                    writer={writer}
+                    onClickCancel={() => setIsWritingDocument(false)}
+                    onClickSave={saveDocument}
+            />}
             <DocumentListContainer>
                 <DocumentListHeader
-                    onClickWrite={() => {
-                        navigate(`/write-document/${bid}`)
-                    }}
+                    onClickWrite={() => setIsWritingDocument(true)}
                     onClickSearch={(searchText) => {
                         const searchedDocuments = documents.filter(document => document.documentname.includes(searchText));
                         setDocuments([...searchedDocuments]);
