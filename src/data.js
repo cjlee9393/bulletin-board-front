@@ -1,3 +1,13 @@
+export const writers = [
+    {
+        wid: 1,
+        username: '돼멜다',
+    }, {
+        wid: 2,
+        username: '표정이',
+    }
+]
+
 export const boards = [{
     bid: 1,
     boardname: 'board1',
