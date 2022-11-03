@@ -1,5 +1,6 @@
 import { DocumentPage } from "../DocumentPage";
 import { getDocumentRouteDecorator } from "./decorators/RouteDecorator";
+import { writers } from "../data";
 
 const did = 1;
 const initialEntries = [`/documents/${did}`];
@@ -16,4 +17,5 @@ export default {
 export const Basic = (args) => <DocumentPage {...args} />
 
 Basic.args = {
+    writer: writers[0],
 }

@@ -58,7 +58,7 @@ export const NewComment = ({ writer, onClickCancel, onClickSave }) => {
                 />
                 <ButtonsContainer>
                     <Button buttonText={'취소'} onclick={onClickCancel} />
-                    <Button buttonText={'저장'} onclick={onClickSave} />
+                    <Button buttonText={'저장'} onclick={() => onClickSave(content)} />
                 </ButtonsContainer>
             </NewCommentBase>
         </>
