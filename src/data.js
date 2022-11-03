@@ -22,8 +22,14 @@ export const documents = [{
 
 export const comments = [{
     cid: 1,
+    wid: 1,
+    username: '돼멜다',
+    did: 1,
     content: '돼멜다 시절이었다면 따지마할에 있겠쥐???',
   }, {
     cid: 2,
+    wid: 2,
+    username: '표정이',
+    did: 1,
     content: '표정이 별로 안슬퍼 보이는건 웬일일까?',
 }];
