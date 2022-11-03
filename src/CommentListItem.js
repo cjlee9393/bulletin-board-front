@@ -1,8 +1,7 @@
 import styled from "styled-components"
 
 const CommentListItemBase = styled.div`
-    width: 800px;
-    background-color: #ccc;
+    background-color: white;
     padding: 15px;
     margin-bottom: 1px;
 `

@@ -3,6 +3,9 @@ import { DocumentListHeader } from './DocumentListHeader';
 import { DocumentListItem } from './DocumentListItem';
 import { documents } from './data';
 import { DocumentListPage } from './DocumentListPage';
+import { DocumentPage } from './DocumentPage';
+
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
   const name = 'test document name';
@@ -17,7 +20,11 @@ function App() {
 
   return (
     <>
-    <DocumentListPage bid={1} />
+      <MemoryRouter initialEntries={['/documents/1']}>
+            <Routes>
+                <Route path={'/documents/:did'} element={<DocumentPage />} />
+            </Routes>
+      </MemoryRouter>
     </>
   );
 }

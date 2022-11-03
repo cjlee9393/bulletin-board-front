@@ -13,7 +13,6 @@ const ButtonBase = styled.button`
 
     font-weight: bold;
     color: white;
-    margin-left: 10px;
 
     :hover {
         cursor: pointer;

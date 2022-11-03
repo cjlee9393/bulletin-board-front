@@ -1,11 +1,13 @@
 import { render, screen } from '@testing-library/react';
 import { Document } from './Document';
+import { documents } from './data';
 
 test('Document shows the right texts', () => {
-  const name = 'test document name';
-  const content = 'test document content';
+  const document = documents[0];
+  const name = document.documentname;
+  const content = document.content;
 
-  render(<Document documentName={name} documentContent={content} />);
+  render(<Document document={document} />);
   const nameElement = screen.getByText(name);
   expect(nameElement).toBeInTheDocument();
 

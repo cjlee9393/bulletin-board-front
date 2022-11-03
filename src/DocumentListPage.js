@@ -6,7 +6,7 @@ import { documents as initialDocuments } from './data';
 import styled from "styled-components";
 
 const DocumentListPageBase = styled.div`
-    height: 1000px;
+    height: 600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,6 +14,7 @@ const DocumentListPageBase = styled.div`
 `
 
 const DocumentListContainer = styled.div`
+    margin: auto;
     width: 900px;
 `
 
