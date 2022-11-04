@@ -7,9 +7,9 @@ import styled from "styled-components";
 import { useState } from "react";
 import { NewComment } from './NewComment';
 import { v4 as uuid } from 'uuid';
+import { useWriter } from './hook-utils/hooks';
 
 const DocumentPageBase = styled.div`
-    height: 600px;
     display: flex;
     flex-direction: column;
     background-color: #ccc;
@@ -18,12 +18,14 @@ const DocumentPageBase = styled.div`
 
 const DocumentPageContainer = styled.div`
     margin: auto;
-    width: 900px;
+    min-width: 800px;
+    max-width: 1000px;
+    margin-top: 100px;
 `
 
 export const DocumentPage = ({
-    writer
 }) => {
+    const { writer, setWriter} = useWriter();
     const { did } = useParams();
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [selectedComments, setSelectedComments] = useState(
@@ -48,7 +50,6 @@ export const DocumentPage = ({
         <DocumentPageBase>
             {isWritingComment && 
                 <NewComment 
-                    writer={writer}
                     onClickCancel={() => setIsWritingComment(false)}
                     onClickSave={saveComment}
                 />}

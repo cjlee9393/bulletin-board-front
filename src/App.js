@@ -8,6 +8,7 @@ import { boards, writers } from './data';
 import { useState } from 'react';
 import { Login } from './Login';
 import { useWriter } from './hook-utils/hooks';
+import { MainPage } from './MainPage';
 
 function App() {
   const {writer, setWriter} = useWriter();
@@ -21,10 +22,10 @@ function App() {
 
   return (
     <>
-      <MemoryRouter initialEntries={['/documents/1']}>
+      <MemoryRouter initialEntries={['/']}>
         <NavBar isLoggedIn={false} boards={boards} />
         <Routes>
-          <Route exact path={'/'} />
+          <Route path={'/'} element={<MainPage />}/>
           <Route exact path={'/boards/:bid'} element={<DocumentListPage writer={writer} />} />
           <Route exact path={'/documents/:did'} element={<DocumentPage writer={writer} />} />
         </Routes>

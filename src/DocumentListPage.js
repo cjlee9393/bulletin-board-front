@@ -6,10 +6,9 @@ import { documents as initialDocuments } from './data';
 import styled from "styled-components";
 import { v4 as uuid } from 'uuid';
 import { NewDocument } from "./NewDocument";
+import { useWriter } from './hook-utils/hooks';
 
 const DocumentListPageBase = styled.div`
-    height: 1000px;
-    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,12 +17,14 @@ const DocumentListPageBase = styled.div`
 
 const DocumentListContainer = styled.div`
     margin: auto;
-    width: 900px;
+    min-width: 800px;
+    max-width: 1000px;
+    margin-top: 100px;
 `
 
 export const DocumentListPage = ({
-    writer
 }) => {
+    const { writer, setWriter} = useWriter();
     const { bid } = useParams();
     const [documents, setDocuments] = useState([]);
     const [isWritingDocument, setIsWritingDocument] = useState(false);
@@ -47,7 +48,6 @@ export const DocumentListPage = ({
         <DocumentListPageBase>
             {isWritingDocument && 
                 <NewDocument
-                    writer={writer}
                     onClickCancel={() => setIsWritingDocument(false)}
                     onClickSave={saveDocument}
             />}

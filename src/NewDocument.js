@@ -28,7 +28,6 @@ const ButtonsContainer = styled.div`
 `
 
 export const NewDocument = ({ 
-    writer,
     onClickCancel,
     onClickSave
 }) => {
