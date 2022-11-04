@@ -4,11 +4,20 @@ import { DocumentListPage } from './DocumentListPage';
 import { DocumentPage } from './DocumentPage';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-
 import { boards, writers } from './data';
+import { useState } from 'react';
+import { Login } from './Login';
+import { useWriter } from './hook-utils/hooks';
 
 function App() {
-  const writer = writers[0];
+  const {writer, setWriter} = useWriter();
+  const initialState = writer !== null;
+
+  const [isLoggedIn, setIsLoggedIn] = useState(initialState);
+
+  if (!isLoggedIn) return (
+    <Login setIsLoggedIn={setIsLoggedIn} />
+  )
 
   return (
     <>

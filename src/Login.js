@@ -37,7 +37,7 @@ export const authenticate = (username, password) => {
 }
 
 export const Login = ({
-    setIsLoggedIn
+    setIsLoggedIn = () => {}
 }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -48,7 +48,7 @@ export const Login = ({
 
         if (writer){
             setWriter(writer);
-            // TODO: run setIsLoggedIn
+            setIsLoggedIn(true);
 
         }else{
             alert('login failed');

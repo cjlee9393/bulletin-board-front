@@ -1,7 +1,8 @@
 import { DocumentListPage } from './DocumentListPage';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, render } from '@testing-library/react';
 import { createMemoryHistory } from 'history'
 import { renderWithRouter } from './test-utils/renderers'
+import { getDocumentRouteDecorator } from './stories/decorators/RouteDecorator';
 
 test('Click on \'글쓰기\' button should show NewDocument component', () => {
     const bid = 1;
@@ -16,9 +17,14 @@ test('Click on \'글쓰기\' button should show NewDocument component', () => {
 
 test('Click on search button should only display documents containing searchText', () => {
     const bid = 1;
+
     const fakeHistory = createMemoryHistory();
 
-    renderWithRouter(<DocumentListPage bid={bid} />, fakeHistory);
+    const decorator = getDocumentRouteDecorator([`/documents/${bid}`], '/documents/:bid');
+
+    render(
+        decorator(DocumentListPage)
+    )
   
     const inputElement = screen.getByRole('input');
     const buttonElement = screen.getByText('검색');    
