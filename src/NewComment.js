@@ -18,7 +18,11 @@ const TextInput = styled.textarea`
     width: 99%;
 `
 
-export const NewComment = ({ writer, onClickCancel, onClickSave }) => {
+export const NewComment = ({ 
+    writer, 
+    onClickCancel, 
+    onClickSave 
+}) => {
     const [content, setContent] = useState('');
     
     return (

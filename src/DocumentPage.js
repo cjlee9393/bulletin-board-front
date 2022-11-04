@@ -28,9 +28,13 @@ export const DocumentPage = ({
     const { writer, setWriter} = useWriter();
     const { did } = useParams();
     const [isWritingComment, setIsWritingComment] = useState(false);
-    const [selectedComments, setSelectedComments] = useState(
-        comments.filter(comment => comment.did === did)
-    );
+
+    let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
+    initialSelectedComments = (initialSelectedComments !== null)
+                            ? initialSelectedComments.filter(comment => comment.did === did)
+                            : comments.filter(comment => comment.did === did)
+
+    const [selectedComments, setSelectedComments] = useState(initialSelectedComments);
     const selectedDocument = documents.find(document => document.did === did);
 
     const saveComment = (content) => {
@@ -43,6 +47,14 @@ export const DocumentPage = ({
         }
 
         setSelectedComments([...selectedComments, newComment]);
+
+        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
+        localStorageComments = (localStorageComments !== null)
+                 ? localStorageComments
+                 : comments;
+
+        localStorage.setItem('comments', JSON.stringify([...localStorageComments, newComment]));
+        
         setIsWritingComment(false);
     }
 
