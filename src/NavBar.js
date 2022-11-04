@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button } from './Button';
+import { useWriter } from "./hook-utils/hooks";
 
 const NavBarBase = styled.div`
     background-color: rgb(60, 195, 250);
@@ -42,12 +43,20 @@ const ImgWrap = styled.div`
 `
 
 export const NavBar = ({
-    isLoggedIn, 
-    onClickLogin = () => {}, 
-    onClickLogout = () => {}, 
-    boards
+    boards,
+    setIsLoggedIn = () => {},
 }) => {
     const navigate = useNavigate();
+    const {writer, setWriter} = useWriter();
+
+    let isLoggedIn = (writer !== null);
+
+    const onClickLogout = () => {
+        setWriter(null);
+        setIsLoggedIn(false);
+        isLoggedIn = false;
+        navigate(['/']);
+    }
 
     return (
         <NavBarBase>
@@ -68,8 +77,7 @@ export const NavBar = ({
                     </BoardWrap>
                 ))}
             </BoardsContainer>
-            {!isLoggedIn && <Button buttonText={'로그인'} onclick={onClickLogin} />}
-            {isLoggedIn && <Button buttonText={'로그아웃'} onclick={onClickLogout} />}
+            {isLoggedIn && <Button buttonText={'로그아웃'} onclick={() => onClickLogout()} />}
 
         </NavBarBase>
     )

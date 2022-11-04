@@ -5,16 +5,20 @@ import { DocumentPage } from './DocumentPage';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { boards, writers } from './data';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Login } from './Login';
 import { useWriter } from './hook-utils/hooks';
 import { MainPage } from './MainPage';
 
 function App() {
   const {writer, setWriter} = useWriter();
-  const initialState = writer !== null;
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const [isLoggedIn, setIsLoggedIn] = useState(initialState);
+  useEffect(() => {
+    console.log('useEffect hook is run');
+    const currentState = writer !== null;
+    setIsLoggedIn(currentState);
+  }, [writer])
 
   if (!isLoggedIn) return (
     <Login setIsLoggedIn={setIsLoggedIn} />
@@ -23,7 +27,7 @@ function App() {
   return (
     <>
       <MemoryRouter initialEntries={['/']}>
-        <NavBar isLoggedIn={false} boards={boards} />
+        <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} boards={boards} />
         <Routes>
           <Route path={'/'} element={<MainPage />}/>
           <Route exact path={'/boards/:bid'} element={<DocumentListPage writer={writer} />} />
