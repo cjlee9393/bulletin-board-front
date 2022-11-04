@@ -28,6 +28,7 @@ export const DocumentPage = ({
     const { writer, setWriter} = useWriter();
     const { did } = useParams();
     const [isWritingComment, setIsWritingComment] = useState(false);
+    const [isEditingComment, setIsEditingComment] = useState(false);
 
     let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
     initialSelectedComments = (initialSelectedComments !== null)
@@ -35,15 +36,16 @@ export const DocumentPage = ({
                             : comments.filter(comment => comment.did === did)
 
     const [selectedComments, setSelectedComments] = useState(initialSelectedComments);
+    const [selectedComment, setSelectedComment] = useState({});
     const selectedDocument = documents.find(document => document.did === did);
 
-    const saveComment = (content) => {
+    const saveComment = (comment) => {
         const newComment = {
+            ...comment,
             cid: uuid(),
             wid: writer.wid,
             username: writer.username,
             did: did,
-            content: content,
         }
 
         setSelectedComments([...selectedComments, newComment]);
@@ -58,12 +60,48 @@ export const DocumentPage = ({
         setIsWritingComment(false);
     }
 
+    const editComment = (updatedComment) => {
+        const updatedComments = selectedComments.map(comment => {
+            if (comment.cid === updatedComment.cid){
+                return {...comment, ...updatedComment}
+            }
+
+            return comment;
+        });
+
+        setSelectedComments(updatedComments);
+        localStorage.setItem('comments', JSON.stringify(updatedComments));
+        
+        setIsEditingComment(false);
+    }
+
+    const deleteComment = (cid) => {
+        const updatedComments = selectedComments.filter(comment => comment.cid !== cid);
+        setSelectedComments(updatedComments);
+        localStorage.setItem('comments', JSON.stringify(updatedComments));
+    }
+
+    const newCommentActions = [
+        {actionName: '취소', onAction: () => setIsWritingComment(false)},
+        {actionName: '저장', onAction: (comment) => saveComment(comment)},
+    ]
+
+    const editCommentActions = [
+        {actionName: '취소', onAction: () => setIsEditingComment(false)},
+        {actionName: '저장', onAction: (comment) => editComment(comment)},
+    ]
+
     return (
         <DocumentPageBase>
             {isWritingComment && 
                 <NewComment 
-                    onClickCancel={() => setIsWritingComment(false)}
-                    onClickSave={saveComment}
+                    actions={newCommentActions}
+                    comment={{}}
+                />}
+            {isEditingComment && 
+                <NewComment 
+                    actions={editCommentActions}
+                    comment={selectedComment}
                 />}
             <DocumentPageContainer>
                 <Document document={selectedDocument} />
@@ -71,7 +109,14 @@ export const DocumentPage = ({
                     buttonText={'댓글쓰기'} 
                     onclick={() => setIsWritingComment(true)} 
                 />
-                <CommentList comments={selectedComments} />
+                <CommentList 
+                    comments={selectedComments}
+                    onClickDelete={deleteComment}
+                    onClickEdit={(comment) => {
+                        setSelectedComment(comment);
+                        setIsEditingComment(true);
+                    }}
+                />
             </DocumentPageContainer>
         </DocumentPageBase>
     )

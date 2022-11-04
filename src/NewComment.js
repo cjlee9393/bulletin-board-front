@@ -19,28 +19,36 @@ const TextInput = styled.textarea`
 `
 
 export const NewComment = ({ 
-    writer, 
-    onClickCancel, 
-    onClickSave 
+    writer,
+    comment = {},
+    actions = [],
 }) => {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(comment.content || '');
+
+    const getComment = () => ({
+        ...comment,
+        content: content,
+    })
     
     return (
         <>
-            <TransparentBackground onClick={() => onClickCancel()} />
+            <TransparentBackground />
             <FormBase>
                 <TextLabel>
                     {'댓글'}
                 </TextLabel>
-                <TextInput 
+                <TextInput
+                    role={'content-input'}
                     placeholder={'댓글 입력..'}
+                    defaultValue={content}
                     cols={'30'}
                     rows={'10'}
                     onChange={e => setContent(e.target.value)}
                 />
                 <ButtonsContainer>
-                    <Button buttonText={'취소'} onclick={onClickCancel} />
-                    <Button buttonText={'저장'} onclick={() => onClickSave(content)} />
+                    {actions.map(action => (
+                        <Button key={action.actionName} buttonText={action.actionName} onclick={() => action.onAction(getComment())} />
+                    ))}
                 </ButtonsContainer>
             </FormBase>
         </>
