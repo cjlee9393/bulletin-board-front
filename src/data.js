@@ -2,9 +2,13 @@ export const writers = [
     {
         wid: '1',
         username: '돼멜다',
+        password: 'speak-and-enter',
+        token: 'example-token-abc',
     }, {
         wid: '2',
         username: '표정이',
+        password: 'shout-and-enter',
+        token: 'example-token-bcd',
     }
 ]
 
