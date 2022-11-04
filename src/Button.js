@@ -9,7 +9,7 @@ const ButtonBase = styled.button`
     height: 35px;
     
     border: none;
-    background-color: rgb(59, 194, 251);
+    background-color: rgb(242, 162, 70);
 
     font-weight: bold;
     color: white;

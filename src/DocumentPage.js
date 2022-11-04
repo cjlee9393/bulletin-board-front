@@ -12,7 +12,6 @@ import { useWriter } from './hook-utils/hooks';
 const DocumentPageBase = styled.div`
     display: flex;
     flex-direction: column;
-    background-color: #ccc;
     align-items: center;
 `
 
@@ -106,7 +105,8 @@ export const DocumentPage = ({
             <DocumentPageContainer>
                 <Document document={selectedDocument} />
                 <Button 
-                    buttonText={'댓글쓰기'} 
+                    buttonText={'댓글쓰기'}
+                    imgFileName={'write.png'}
                     onclick={() => setIsWritingComment(true)} 
                 />
                 <CommentList 

@@ -36,8 +36,8 @@ export const CommentListItem = ({
             <CommentListItemHeader>
                 <UserNameWrap>{comment.username}</UserNameWrap>
                 <ButtonWrap>
-                    <Button buttonText={'수정'} onclick={() => onClickEdit(comment)} />
-                    <Button buttonText={'삭제'} onclick={() => onClickDelete(comment.cid)} />
+                    <Button buttonText={'수정'} imgFileName={'edit.png'} onclick={() => onClickEdit(comment)} />
+                    <Button buttonText={'삭제'} imgFileName={'delete.png'} onclick={() => onClickDelete(comment.cid)} />
                 </ButtonWrap>
             </CommentListItemHeader>
             <ContentWrap>{comment.content}</ContentWrap>

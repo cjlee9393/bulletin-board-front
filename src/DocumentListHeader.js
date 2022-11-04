@@ -24,14 +24,14 @@ export const DocumentListHeader = ({ onClickWrite = () => {}, onClickSearch = (s
 
     return (
         <DocumentListHeaderBase>
-            <Button buttonText={'글쓰기'} onclick={onClickWrite} />
+            <Button buttonText={'글쓰기'} imgFileName={'write.png'} onclick={onClickWrite} />
             <SearchWrap>
                 <SearchTextInput 
                     role={'input'}
                     placeholder={'검색어'}
                     onChange={(e) => setSearchText(e.target.value)}
                 />
-                <Button buttonText={'검색'} onclick={() => {
+                <Button buttonText={'검색'} imgFileName={'search.png'} onclick={() => {
                     onClickSearch(searchText);
                 }} />
             </SearchWrap>

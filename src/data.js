@@ -14,10 +14,19 @@ export const writers = [
 
 export const boards = [{
     bid: '1',
-    boardname: 'board1',
+    boardname: '이슈',
 }, {
     bid: '2',
-    boardname: 'board2',
+    boardname: '커뮤니티',
+}, {
+    bid: '3',
+    boardname: '취미/창작',
+}, {
+    bid: '4',
+    boardname: '취업정보',
+}, {
+    bid: '4',
+    boardname: '이벤트',
 }]
 
 export const documents = [{

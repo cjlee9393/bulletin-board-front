@@ -4,7 +4,7 @@ import { Button } from './Button';
 import { useWriter } from "./hook-utils/hooks";
 
 const NavBarBase = styled.div`
-    background-color: rgb(60, 195, 250);
+    background-color: rgb(242, 162, 70);
     min-height: 60px;
     display: flex;
     justify-content: space-between;
@@ -17,16 +17,32 @@ const BoardsContainer = styled.div`
 
 const BoardWrap = styled.div`
     font-weight: bold;
+    font-size: 1.2em;
     color: white;
-    margin-right: 20px;
+    margin-right: 40px;
     :hover {
         cursor: pointer;
     }
 `
 
 const ImgBox = styled.div`
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
+    margin: 20px;
+`
+
+const TextBox = styled.div`
+    display: flex;
+    flex-direction: column;
+`
+
+const TextTop = styled.div`
+    font-size: 0.8em;
+    text-align: center;
+`
+
+const TextBottom = styled.div`
+    font-size: 1.2em;
 `
 
 const ImgWrap = styled.div`
@@ -65,10 +81,13 @@ export const NavBar = ({
                 onClick={() => navigate('/')}>
                 <ImgBox>
                     <img 
-                        src={process.env.PUBLIC_URL + '/logo192.png'} 
+                        src={process.env.PUBLIC_URL + '/company.png'} 
                         style={{objectFit: 'cover'}} />
                 </ImgBox>
-                {'게시판 사이트'}
+                <TextBox>
+                    <TextTop>{'직장인SNS'}</TextTop>
+                    <TextBottom>{'컴퍼니픽'}</TextBottom>
+                </TextBox>
             </ImgWrap>
             <BoardsContainer>
                 {boards.map(board => (
@@ -77,7 +96,7 @@ export const NavBar = ({
                     </BoardWrap>
                 ))}
             </BoardsContainer>
-            {isLoggedIn && <Button buttonText={'로그아웃'} onclick={() => onClickLogout()} />}
+            {isLoggedIn && <Button buttonText={'로그아웃'} imgFileName={'logout.png'} onclick={() => onClickLogout()} />}
 
         </NavBarBase>
     )
