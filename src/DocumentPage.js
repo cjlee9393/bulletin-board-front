@@ -24,6 +24,10 @@ const DocumentPageContainer = styled.div`
     margin-top: 100px;
 `
 
+const ButtonsWrap = styled.div`
+    display: flex;
+`
+
 export const DocumentPage = ({
     documents,
     setDocuments,
@@ -51,7 +55,8 @@ export const DocumentPage = ({
     const bid = selectedDocument.bid
 
     useEffect(() => {
-        setDocuments(localStorageDocuments.filter(document => document.bid === bid));        
+        setDocuments(localStorageDocuments.filter(document => document.bid === bid)); 
+        console.log(documents)       
     }, [bid]);
 
     const deleteDocument = (selectedDocument) => {
@@ -127,16 +132,18 @@ export const DocumentPage = ({
                 />}
             <DocumentPageContainer>
                 <Document document={selectedDocument} />
-                <Button 
-                    buttonText={'댓글쓰기'}
-                    imgFileName={'write.png'}
-                    onclick={() => setIsWritingComment(true)} 
-                />
-                <Button 
-                    buttonText={'글삭제'}
-                    imgFileName={'delete.png'}
-                    onclick={() => deleteDocument(selectedDocument)} 
-                />
+                <ButtonsWrap>
+                    <Button 
+                        buttonText={'댓글쓰기'}
+                        imgFileName={'write.png'}
+                        onclick={() => setIsWritingComment(true)} 
+                    />
+                    <Button 
+                        buttonText={'글삭제'}
+                        imgFileName={'delete.png'}
+                        onclick={() => deleteDocument(selectedDocument)} 
+                    />
+                </ButtonsWrap>
                 <CommentList 
                     comments={selectedComments}
                     onClickDelete={deleteComment}

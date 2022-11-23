@@ -39,6 +39,7 @@ export const DocumentListPage = ({
 
     const saveDocument = (documentname, content) => {
         const document = {
+            bid: bid,
             did: uuid(),
             documentname: documentname,
             content: content,
