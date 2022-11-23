@@ -29,10 +29,11 @@ const ButtonsContainer = styled.div`
 
 export const NewDocument = ({ 
     onClickCancel,
-    onClickSave
+    onClickSave,
+    document = {},
 }) => {
-    const [documentname, setDocumentname] = useState();
-    const [content, setContent] = useState();
+    const [documentname, setDocumentname] = useState(document.documentname || '');
+    const [content, setContent] = useState(document.content || '');
 
     return (
         <>
@@ -42,6 +43,7 @@ export const NewDocument = ({
                 <NameInput 
                     role='name-input'
                     placeholder='제목 입력..'
+                    defaultValue={documentname}
                     onChange={(e) => setDocumentname(e.target.value)}
                 />
                 <InputLabel>{'내용'}</InputLabel>
@@ -50,6 +52,7 @@ export const NewDocument = ({
                     placeholder='내용 입력..'
                     cols={'50'}
                     rows={'20'}
+                    defaultValue={content}
                     onChange={(e) => setContent(e.target.value)}
                 />
                 <ButtonsContainer>

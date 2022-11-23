@@ -10,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import { useWriter } from './hook-utils/hooks';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { NewDocument } from "./NewDocument";
 
 const DocumentPageBase = styled.div`
     display: flex;
@@ -37,6 +38,7 @@ export const DocumentPage = ({
     const navigate = useNavigate();
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);
+    const [isEditingDocument, setIsEditingDocument] = useState(false);
 
     let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
     initialSelectedComments = (initialSelectedComments !== null)
@@ -59,11 +61,30 @@ export const DocumentPage = ({
         console.log(documents)       
     }, [bid]);
 
+    const editDocument = (documentname, content) => {
+        const updatedDocument = {
+            ...selectedDocument,
+            documentname: documentname,
+            content: content,
+        }
+
+        const updatedDocuments = documents.map(document => {
+            if (document.did === updatedDocument.did) return updatedDocument
+            
+            return document
+        })
+
+        setDocuments(updatedDocuments);
+        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
+        setIsEditingDocument(false);
+        navigate(`/documents/${did}`);
+    }
+
     const deleteDocument = (selectedDocument) => {
         const updatedDocuments = documents.filter(document => document.did != selectedDocument.did)
-        setDocuments(updatedDocuments)
+        setDocuments(updatedDocuments);
         localStorage.setItem('documents', JSON.stringify(updatedDocuments));
-        navigate('/')
+        navigate(`/boards/${bid}`);
     }
 
     const saveComment = (comment) => {
@@ -130,6 +151,12 @@ export const DocumentPage = ({
                     actions={editCommentActions}
                     comment={selectedComment}
                 />}
+            {isEditingDocument &&
+                <NewDocument
+                    onClickCancel={() => setIsEditingDocument(false)}
+                    onClickSave={(documentname, content) => editDocument(documentname, content)}
+                    document={selectedDocument}
+                />}
             <DocumentPageContainer>
                 <Document document={selectedDocument} />
                 <ButtonsWrap>
@@ -139,7 +166,12 @@ export const DocumentPage = ({
                         onclick={() => setIsWritingComment(true)} 
                     />
                     <Button 
-                        buttonText={'글삭제'}
+                        buttonText={'수정'}
+                        imgFileName={'edit.png'}
+                        onclick={() => setIsEditingDocument(true)} 
+                    />
+                    <Button
+                        buttonText={'삭제'}
                         imgFileName={'delete.png'}
                         onclick={() => deleteDocument(selectedDocument)} 
                     />
