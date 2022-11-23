@@ -1,23 +1,10 @@
 import { useWriter } from "./hook-utils/hooks";
 import styled from "styled-components";
-import { writers } from "./data";
+import { writers as initialWriters } from "./data";
 import { useState } from "react";
 import { Button } from "./Button";
-import { FormBase, TransparentBackground } from "./form-utils/forms";
-
-const InputLabel = styled.label`
-    width: 300px;
-    font-weight: bold;
-    font-size: 1.1em;
-`
-
-const InputBase = styled.input`
-    font-size: 1.1em;
-    width: 300px;
-    padding: 10px;
-    margin-left: 20px;
-    margin-bottom: 50px;
-`
+import { FormBase, InputLabel, InputBase } from "./form-utils/forms";
+import { NewWriter } from "./NewWriter";
 
 const LoginBase = styled.div`
     display: flex;
@@ -25,9 +12,13 @@ const LoginBase = styled.div`
     align-items: center;
 `
 
-
 export const authenticate = (username, password) => {
-    for (let writer of writers){
+    let localStorageWriters = JSON.parse(localStorage.getItem('writers'))
+    localStorageWriters = (localStorageWriters != null)
+                        ? localStorageWriters
+                        : initialWriters
+
+    for (let writer of localStorageWriters){
         if (writer.username === username && writer.password === password){
             return writer;
         }
@@ -42,6 +33,7 @@ export const Login = ({
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {setWriter, writer: _} = useWriter();
+    const [isSiginingUp, setIsSigningUp] = useState(false);
 
     const onClickLogin = (username, password) => {
         const writer = authenticate(username, password);
@@ -55,9 +47,18 @@ export const Login = ({
         }
     }
     
+    const onClickSignUp = () => {
+        setIsSigningUp(false)
+    }
+    
     return (
         <FormBase>
             <LoginBase>
+                {isSiginingUp &&
+                    <NewWriter 
+                        onClickSignUp={onClickSignUp}
+                    />
+                }
                 <h3>Welcome!</h3>
                 <InputLabel>아이디</InputLabel>
                 <InputBase
@@ -75,6 +76,10 @@ export const Login = ({
                 <Button
                     buttonText={'로그인'} 
                     onclick={() => onClickLogin(username, password)}
+                />
+                <Button
+                    buttonText={'아이디 생성'} 
+                    onclick={() => setIsSigningUp(true)}
                 />
             </LoginBase>
         </FormBase>    
