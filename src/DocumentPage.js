@@ -2,12 +2,14 @@ import { useParams } from "react-router-dom";
 import { Document } from './Document';
 import { CommentList } from './CommentList';
 import { Button } from "./Button";
-import { documents, comments } from "./data";
+import { documents as initialDocuments, comments as initialComments } from "./data";
 import styled from "styled-components";
 import { useState } from "react";
 import { NewComment } from './NewComment';
 import { v4 as uuid } from 'uuid';
 import { useWriter } from './hook-utils/hooks';
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const DocumentPageBase = styled.div`
     display: flex;
@@ -23,20 +25,41 @@ const DocumentPageContainer = styled.div`
 `
 
 export const DocumentPage = ({
+    documents,
+    setDocuments,
 }) => {
     const { writer, setWriter} = useWriter();
     const { did } = useParams();
+    const navigate = useNavigate();
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);
 
     let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
     initialSelectedComments = (initialSelectedComments !== null)
                             ? initialSelectedComments.filter(comment => comment.did === did)
-                            : comments.filter(comment => comment.did === did)
+                            : initialComments.filter(comment => comment.did === did)
 
     const [selectedComments, setSelectedComments] = useState(initialSelectedComments);
     const [selectedComment, setSelectedComment] = useState({});
-    const selectedDocument = documents.find(document => document.did === did);
+
+    let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
+    localStorageDocuments = (localStorageDocuments !== null)
+                            ? localStorageDocuments
+                            : initialDocuments
+    
+    const selectedDocument = localStorageDocuments.find(document => document.did === did)
+    const bid = selectedDocument.bid
+
+    useEffect(() => {
+        setDocuments(localStorageDocuments.filter(document => document.bid === bid));        
+    }, [bid]);
+
+    const deleteDocument = (selectedDocument) => {
+        const updatedDocuments = documents.filter(document => document.did != selectedDocument.did)
+        setDocuments(updatedDocuments)
+        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
+        navigate('/')
+    }
 
     const saveComment = (comment) => {
         const newComment = {
@@ -52,7 +75,7 @@ export const DocumentPage = ({
         let localStorageComments = JSON.parse(localStorage.getItem('comments'));
         localStorageComments = (localStorageComments !== null)
                  ? localStorageComments
-                 : comments;
+                 : initialComments;
 
         localStorage.setItem('comments', JSON.stringify([...localStorageComments, newComment]));
         
@@ -108,6 +131,11 @@ export const DocumentPage = ({
                     buttonText={'댓글쓰기'}
                     imgFileName={'write.png'}
                     onclick={() => setIsWritingComment(true)} 
+                />
+                <Button 
+                    buttonText={'글삭제'}
+                    imgFileName={'delete.png'}
+                    onclick={() => deleteDocument(selectedDocument)} 
                 />
                 <CommentList 
                     comments={selectedComments}

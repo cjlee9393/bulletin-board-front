@@ -4,7 +4,7 @@ import { DocumentListPage } from './DocumentListPage';
 import { DocumentPage } from './DocumentPage';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { boards, writers } from './data';
+import { boards } from './data';
 import { useEffect, useState } from 'react';
 import { Login } from './Login';
 import { useWriter } from './hook-utils/hooks';
@@ -13,6 +13,7 @@ import { MainPage } from './MainPage';
 function App() {
   const {writer, setWriter} = useWriter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
     console.log('useEffect hook is run');
@@ -30,8 +31,18 @@ function App() {
         <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} boards={boards} />
         <Routes>
           <Route path={'/'} element={<MainPage />}/>
-          <Route exact path={'/boards/:bid'} element={<DocumentListPage writer={writer} />} />
-          <Route exact path={'/documents/:did'} element={<DocumentPage writer={writer} />} />
+          <Route exact path={'/boards/:bid'} element={<DocumentListPage 
+              writer={writer} 
+              documents={documents}
+              setDocuments={setDocuments}
+            />} 
+          />
+          <Route exact path={'/documents/:did'} element={<DocumentPage 
+              writer={writer} 
+              documents={documents}
+              setDocuments={setDocuments}
+            />} 
+          />
         </Routes>
       </MemoryRouter>
     </>

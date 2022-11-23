@@ -22,14 +22,19 @@ const DocumentListContainer = styled.div`
 `
 
 export const DocumentListPage = ({
+    documents,
+    setDocuments
 }) => {
     const { writer, setWriter} = useWriter();
     const { bid } = useParams();
-    const [documents, setDocuments] = useState([]);
     const [isWritingDocument, setIsWritingDocument] = useState(false);
 
     useEffect(() => {
-        setDocuments(initialDocuments.filter(document => document.bid === bid));
+        let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
+        localStorageDocuments = (localStorageDocuments !== null)
+                                ? localStorageDocuments
+                                : initialDocuments
+        setDocuments(localStorageDocuments.filter(document => document.bid === bid));
     }, [bid]);
 
     const saveDocument = (documentname, content) => {
@@ -40,6 +45,7 @@ export const DocumentListPage = ({
         }
 
         setDocuments([...documents, document]);
+        localStorage.setItem('documents', JSON.stringify([...documents, document]));
         setIsWritingDocument(false);
     }
 

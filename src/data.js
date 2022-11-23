@@ -25,7 +25,7 @@ export const boards = [{
     bid: '4',
     boardname: '취업정보',
 }, {
-    bid: '4',
+    bid: '5',
     boardname: '이벤트',
 }]
 
