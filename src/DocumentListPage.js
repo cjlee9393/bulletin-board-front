@@ -39,6 +39,7 @@ export const DocumentListPage = ({
 
     const saveDocument = (documentname, content) => {
         const document = {
+            wid: writer.wid,
             bid: bid,
             did: uuid(),
             documentname: documentname,

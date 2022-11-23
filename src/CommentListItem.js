@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { Button } from "./Button";
+import { useWriter } from "./hook-utils/hooks";
 
 const CommentListItemBase = styled.div`
     background-color: white;
@@ -31,13 +32,28 @@ export const CommentListItem = ({
     onClickEdit,
     onClickDelete,
 }) => {    
+    const {writer, setWriter} = useWriter()
+    const checkCommentWriter = (writer, comment) => {
+        return (writer.wid === comment.wid)
+    }
+
     return (
         <CommentListItemBase>
             <CommentListItemHeader>
                 <UserNameWrap>{comment.username}</UserNameWrap>
                 <ButtonWrap>
-                    <Button buttonText={'수정'} imgFileName={'edit.png'} onclick={() => onClickEdit(comment)} />
-                    <Button buttonText={'삭제'} imgFileName={'delete.png'} onclick={() => onClickDelete(comment.cid)} />
+                    {checkCommentWriter(writer, comment) &&
+                        <Button 
+                            buttonText={'수정'} 
+                            imgFileName={'edit.png'} 
+                            onclick={() => onClickEdit(comment)} 
+                        />}
+                    {checkCommentWriter(writer, comment) && 
+                        <Button 
+                            buttonText={'삭제'} 
+                            imgFileName={'delete.png'} 
+                            onclick={() => onClickDelete(comment.cid)} 
+                    />}
                 </ButtonWrap>
             </CommentListItemHeader>
             <ContentWrap>{comment.content}</ContentWrap>

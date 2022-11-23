@@ -61,6 +61,10 @@ export const DocumentPage = ({
         console.log(documents)       
     }, [bid]);
 
+    const checkDocumentWriter = (writer, selectedDocument) => {
+        return (writer.wid === selectedDocument.wid)
+    }
+
     const editDocument = (documentname, content) => {
         const updatedDocument = {
             ...selectedDocument,
@@ -165,16 +169,18 @@ export const DocumentPage = ({
                         imgFileName={'write.png'}
                         onclick={() => setIsWritingComment(true)} 
                     />
-                    <Button 
-                        buttonText={'수정'}
-                        imgFileName={'edit.png'}
-                        onclick={() => setIsEditingDocument(true)} 
-                    />
-                    <Button
-                        buttonText={'삭제'}
-                        imgFileName={'delete.png'}
-                        onclick={() => deleteDocument(selectedDocument)} 
-                    />
+                    {checkDocumentWriter(writer, selectedDocument) &&
+                        <Button 
+                            buttonText={'수정'}
+                            imgFileName={'edit.png'}
+                            onclick={() => setIsEditingDocument(true)} 
+                        />}
+                    {checkDocumentWriter(writer, selectedDocument) && 
+                        <Button
+                            buttonText={'삭제'}
+                            imgFileName={'delete.png'}
+                            onclick={() => deleteDocument(selectedDocument)} 
+                        />}
                 </ButtonsWrap>
                 <CommentList 
                     comments={selectedComments}
