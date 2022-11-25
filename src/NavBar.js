@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button } from './Button';
 import { useWriter } from "./hook-utils/hooks";
+import { useContext } from "react";
+import { WriterContext } from "./contexts/WriterContext";
 
 const NavBarBase = styled.div`
     background-color: rgb(242, 162, 70);
@@ -63,12 +65,12 @@ export const NavBar = ({
     setIsLoggedIn = () => {},
 }) => {
     const navigate = useNavigate();
-    const {writer, setWriter} = useWriter();
+    const {writer, saveWriter} = useContext(WriterContext);
 
     let isLoggedIn = (writer !== null);
 
     const onClickLogout = () => {
-        setWriter(null);
+        saveWriter(null);
         setIsLoggedIn(false);
         isLoggedIn = false;
         navigate(['/']);

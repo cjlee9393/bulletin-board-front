@@ -1,5 +1,6 @@
 import { authenticate, Login } from './Login';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { renderWithContext } from './test-utils/renderers';
 
 test('authenticate() returns writer if valid username and password is given', () => {
     let username = '돼멜다';
@@ -20,7 +21,7 @@ test('authenticate() returns writer if valid username and password is given', ()
 test('writer is saved in localStorage', () => {
     localStorage.clear();
 
-    render(<Login />);
+    renderWithContext(<Login />);
 
     const usernameElement = screen.getByRole('username-input');
     fireEvent.change(usernameElement, {target: {value: '돼멜다'}});

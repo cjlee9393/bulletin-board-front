@@ -4,14 +4,8 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { comments, documents, writers } from './data';
 import { Routes, Route } from 'react-router-dom';
 import { renderWithContext } from './test-utils/renderers';
-import { useWriter } from './hook-utils/hooks';
-import { useState } from 'react';
 
-const {writer, setWriter} = useWriter();
-setWriter({
-    username: '돼멜다',
-    wid:'1',
-});
+localStorage.setItem('writer', JSON.stringify(writers[0]));
 
 test('DocumentPage should get did from URL and display corresponding document', () => {
     const did = '1';
@@ -88,7 +82,7 @@ test('click on delete button removes comment from local storage', () => {
     const localStorageComments = JSON.parse(localStorage.getItem('comments'));
 
     for (let comment of localStorageComments){
-        expect(comment.content.localeCompare(targetCommentText)).toBeFalsy();
+        expect(comment.content.localeCompare(targetCommentText) != 0).toBeTruthy();
     }
 })
 

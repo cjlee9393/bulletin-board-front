@@ -13,6 +13,7 @@ import { NewDocument } from "./NewDocument";
 
 import { DocumentsContext } from "./contexts/DocumentsContext";
 import { CommentsContext } from './contexts/CommentsContext';
+import { WriterContext } from "./contexts/WriterContext";
 
 const DocumentPageBase = styled.div`
     display: flex;
@@ -33,12 +34,12 @@ const ButtonsWrap = styled.div`
 
 export const DocumentPage = ({
 }) => {
-    const { writer, setWriter} = useWriter();
     const { did } = useParams();
     const navigate = useNavigate();
 
     const { selectDocument, editDocument, deleteDocument } = useContext(DocumentsContext);
     const { comments, initComments, saveComment, editComment, deleteComment } = useContext(CommentsContext);
+    const { writer } = useContext(WriterContext);
 
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);

@@ -1,5 +1,5 @@
 import { NavBar } from './NavBar';
-import { renderWithRouter } from './test-utils/renderers';
+import { renderWithRouter, renderWithRouterAndContext } from './test-utils/renderers';
 import { createMemoryHistory } from 'history';
 import { screen, fireEvent } from '@testing-library/react';
 import { boards, writers } from './data';
@@ -7,7 +7,7 @@ import { boards, writers } from './data';
 test('Click on home navigates to \'/\'', () => {
     const fakeHistory = createMemoryHistory({initialEntries: ['/some-random-url']});
 
-    renderWithRouter(<NavBar isLoggedIn={false} boards={boards}/>, fakeHistory);
+    renderWithRouterAndContext(<NavBar isLoggedIn={false} boards={boards}/>, fakeHistory);
   
     const homeElement = screen.getByRole('home');
 
@@ -21,7 +21,7 @@ test('Click on boardname navigates to \'/boards/:bid\'', () => {
 
     const board = boards[0];
 
-    renderWithRouter(<NavBar isLoggedIn={false} boards={boards} />, fakeHistory);
+    renderWithRouterAndContext(<NavBar isLoggedIn={false} boards={boards} />, fakeHistory);
   
     const boardElement = screen.getByText(board.boardname);
 
@@ -33,7 +33,7 @@ test('Click on boardname navigates to \'/boards/:bid\'', () => {
 test('Logout button exists if loggedIn', () => {
     localStorage.setItem('writer', JSON.stringify(writers[0]));
 
-    renderWithRouter(<NavBar boards={boards} />);
+    renderWithRouterAndContext(<NavBar boards={boards} />);
 
     const logoutButton = screen.queryByText(/로그아웃/i);
 
@@ -43,7 +43,7 @@ test('Logout button exists if loggedIn', () => {
 test('Click on Logout button removes logout button from screen', () => {
     localStorage.setItem('writer', JSON.stringify(writers[0]));
 
-    renderWithRouter(<NavBar boards={boards} />);
+    renderWithRouterAndContext(<NavBar boards={boards} />);
 
     fireEvent.click(screen.queryByText(/로그아웃/i));
 
@@ -55,7 +55,7 @@ test('Click on Logout button removes logout button from screen', () => {
 test('Click on Logout button removes writer information from localStorage', () => {
     localStorage.setItem('writer', JSON.stringify(writers[0]));
 
-    renderWithRouter(<NavBar boards={boards} />);
+    renderWithRouterAndContext(<NavBar boards={boards} />);
 
     fireEvent.click(screen.queryByText(/로그아웃/i));
 

@@ -1,5 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { CommentListItem } from './CommentListItem';
+import { renderWithContext } from './test-utils/renderers';
+import { writers } from './data';
+
+localStorage.setItem('writer', JSON.stringify(writers[0]));
 
 test('CommentListItem shows the right text', () => {
   const content = 'test document content';
@@ -9,7 +13,7 @@ test('CommentListItem shows the right text', () => {
     content: content,
   }
 
-  render(<CommentListItem comment={comment} />);
+  renderWithContext(<CommentListItem comment={comment} />);
   const contentElement = screen.getByText(content);
   expect(contentElement).toBeInTheDocument();
 });

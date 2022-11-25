@@ -5,6 +5,8 @@ import { useState } from "react";
 import { Button } from "./Button";
 import { FormBase, InputLabel, InputBase } from "./form-utils/forms";
 import { NewWriter } from "./NewWriter";
+import { useContext } from "react";
+import { WriterContext } from "./contexts/WriterContext";
 
 const LoginBase = styled.div`
     display: flex;
@@ -32,14 +34,14 @@ export const Login = ({
 }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const {setWriter, writer: _} = useWriter();
+    const {saveWriter} = useContext(WriterContext);
     const [isSiginingUp, setIsSigningUp] = useState(false);
 
     const onClickLogin = (username, password) => {
         const writer = authenticate(username, password);
 
         if (writer){
-            setWriter(writer);
+            saveWriter(writer);
             setIsLoggedIn(true);
 
         }else{

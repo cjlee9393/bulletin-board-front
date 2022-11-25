@@ -40,6 +40,7 @@ export const DocumentsProvider = ({ children }) => {
         }
 
         setDocuments([...documents, document]);
+        
         localStorage.setItem('documents', JSON.stringify([...documents, document]));
     }
 

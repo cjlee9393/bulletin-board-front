@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import { Button } from "./Button";
 import { useWriter } from "./hook-utils/hooks";
+import { useContext } from "react";
+
+import { WriterContext } from './contexts/WriterContext';
 
 const CommentListItemBase = styled.div`
     background-color: white;
@@ -32,7 +35,7 @@ export const CommentListItem = ({
     onClickEdit,
     onClickDelete,
 }) => {    
-    const {writer, setWriter} = useWriter()
+    const {writer} = useContext(WriterContext);
     const checkCommentWriter = (writer, comment) => {
         return (writer.wid === comment.wid)
     }

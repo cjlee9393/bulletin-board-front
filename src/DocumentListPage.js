@@ -6,7 +6,7 @@ import { NewDocument } from "./NewDocument";
 import { DocumentListHeader } from './DocumentListHeader'; 
 import { DocumentList } from "./DocumentList";
 
-import { useWriter } from './hook-utils/hooks';
+import { WriterContext } from './contexts/WriterContext';
 import { DocumentsContext } from "./contexts/DocumentsContext";
 
 const DocumentListPageBase = styled.div`
@@ -24,7 +24,7 @@ const DocumentListContainer = styled.div`
 
 export const DocumentListPage = ({
 }) => {
-    const { writer, setWriter } = useWriter();
+    const { writer } = useContext(WriterContext);
     const { bid } = useParams();
     const [isWritingDocument, setIsWritingDocument] = useState(false);
     const { documents, initDocuments, saveDocument, searchDocuments } = useContext(DocumentsContext);
