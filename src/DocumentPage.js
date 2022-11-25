@@ -1,16 +1,16 @@
 import { useParams } from "react-router-dom";
-import { Document } from './Document';
-import { CommentList } from './CommentList';
 import { Button } from "./Button";
-import { documents as initialDocuments, comments as initialComments } from "./data";
 import styled from "styled-components";
 import { useContext, useState } from "react";
-import { NewComment } from './NewComment';
-import { v4 as uuid } from 'uuid';
 import { useWriter } from './hook-utils/hooks';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+
+import { NewComment } from './NewComment';
+import { Document } from './Document';
+import { CommentList } from './CommentList';
 import { NewDocument } from "./NewDocument";
+
 import { DocumentsContext } from "./contexts/DocumentsContext";
 import { CommentsContext } from './contexts/CommentsContext';
 
@@ -50,7 +50,6 @@ export const DocumentPage = ({
     useEffect(() => {
         initComments(did);
     }, [did]);
-    
 
     const checkDocumentWriter = (writer, selectedDocument) => {
         return (writer.wid === selectedDocument.wid)

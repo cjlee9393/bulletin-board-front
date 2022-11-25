@@ -1,13 +1,12 @@
+import { useEffect, useState, useContext } from "react";
+import styled from "styled-components";
 import { useParams } from "react-router-dom";
+
+import { NewDocument } from "./NewDocument";
 import { DocumentListHeader } from './DocumentListHeader'; 
 import { DocumentList } from "./DocumentList";
-import { useEffect, useState } from "react";
-import { documents as initialDocuments } from './data';
-import styled from "styled-components";
-import { v4 as uuid } from 'uuid';
-import { NewDocument } from "./NewDocument";
+
 import { useWriter } from './hook-utils/hooks';
-import { useContext } from "react";
 import { DocumentsContext } from "./contexts/DocumentsContext";
 
 const DocumentListPageBase = styled.div`

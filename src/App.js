@@ -15,10 +15,8 @@ import { MainPage } from './MainPage';
 function App() {
   const {writer, setWriter} = useWriter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [documents, setDocuments] = useState([]);
 
   useEffect(() => {
-    console.log('useEffect hook is run');
     const currentState = writer !== null;
     setIsLoggedIn(currentState);
   }, [writer])
