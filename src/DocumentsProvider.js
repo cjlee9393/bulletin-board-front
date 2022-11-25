@@ -20,6 +20,15 @@ export const DocumentsProvider = ({ children }) => {
         )
     }
 
+    const selectDocument = (did) => {
+        let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
+        localStorageDocuments = (localStorageDocuments !== null)
+                                ? localStorageDocuments
+                                : initialDocuments
+
+        return localStorageDocuments.find(document => document.did === did)
+    }
+
     // save documents
     const saveDocument = (wid, bid, documentname, content) => {
         const document = {
@@ -67,7 +76,7 @@ export const DocumentsProvider = ({ children }) => {
     }
 
     return (
-        <DocumentsContext.Provider value={{documents, initDocuments, saveDocument, searchDocuments, editDocument, deleteDocument}}>
+        <DocumentsContext.Provider value={{documents, initDocuments, selectDocument, saveDocument, searchDocuments, editDocument, deleteDocument}}>
             {children}
         </DocumentsContext.Provider>
     )

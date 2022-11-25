@@ -3,6 +3,7 @@ import { NavBar } from './NavBar';
 import { DocumentListPage } from './DocumentListPage';
 import { DocumentPage } from './DocumentPage';
 import { DocumentsProvider } from './DocumentsProvider';
+import { CommentsProvider } from './CommentsProvider';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { boards } from './data';
@@ -30,6 +31,7 @@ function App() {
     <>
       <MemoryRouter initialEntries={['/']}>
         <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} boards={boards} />
+        <CommentsProvider>
         <DocumentsProvider>
           <Routes>
               <Route path={'/'} element={<MainPage />}/>
@@ -39,12 +41,11 @@ function App() {
               />
               <Route exact path={'/documents/:did'} element={<DocumentPage 
                   writer={writer} 
-                  documents={documents}
-                  setDocuments={setDocuments}
                 />} 
               />
           </Routes>
         </DocumentsProvider>
+        </CommentsProvider>
       </MemoryRouter>
     </>
   );

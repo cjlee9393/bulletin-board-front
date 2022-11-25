@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { NewDocument } from "./NewDocument";
 import { DocumentsContext } from "./contexts/DocumentsContext";
+import { CommentsContext } from './contexts/CommentsContext';
 
 const DocumentPageBase = styled.div`
     display: flex;
@@ -31,92 +32,44 @@ const ButtonsWrap = styled.div`
 `
 
 export const DocumentPage = ({
-    documents,
-    setDocuments,
 }) => {
     const { writer, setWriter} = useWriter();
     const { did } = useParams();
     const navigate = useNavigate();
+
+    const { selectDocument, editDocument, deleteDocument } = useContext(DocumentsContext);
+    const { comments, initComments, saveComment, editComment, deleteComment } = useContext(CommentsContext);
+
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);
     const [isEditingDocument, setIsEditingDocument] = useState(false);
-    const { editDocument, deleteDocument } = useContext(DocumentsContext);
 
-    let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
-    initialSelectedComments = (initialSelectedComments !== null)
-                            ? initialSelectedComments.filter(comment => comment.did === did)
-                            : initialComments.filter(comment => comment.did === did)
-
-    const [selectedComments, setSelectedComments] = useState(initialSelectedComments);
     const [selectedComment, setSelectedComment] = useState({});
-
-    let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
-    localStorageDocuments = (localStorageDocuments !== null)
-                            ? localStorageDocuments
-                            : initialDocuments
-    
-    const selectedDocument = localStorageDocuments.find(document => document.did === did)
-    const bid = selectedDocument.bid
+    const selectedDocument = selectDocument(did);
 
     useEffect(() => {
-        setDocuments(localStorageDocuments.filter(document => document.bid === bid)); 
-        console.log(documents)       
-    }, [bid]);
+        initComments(did);
+    }, [did]);
+    
 
     const checkDocumentWriter = (writer, selectedDocument) => {
         return (writer.wid === selectedDocument.wid)
     }
 
-    const saveComment = (comment) => {
-        const newComment = {
-            ...comment,
-            cid: uuid(),
-            wid: writer.wid,
-            username: writer.username,
-            did: did,
-        }
-
-        setSelectedComments([...selectedComments, newComment]);
-
-        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
-        localStorageComments = (localStorageComments !== null)
-                 ? localStorageComments
-                 : initialComments;
-
-        localStorage.setItem('comments', JSON.stringify([...localStorageComments, newComment]));
-        
-        setIsWritingComment(false);
-    }
-
-    const editComment = (updatedComment) => {
-        const updatedComments = selectedComments.map(comment => {
-            if (comment.cid === updatedComment.cid){
-                return {...comment, ...updatedComment}
-            }
-
-            return comment;
-        });
-
-        setSelectedComments(updatedComments);
-        localStorage.setItem('comments', JSON.stringify(updatedComments));
-        
-        setIsEditingComment(false);
-    }
-
-    const deleteComment = (cid) => {
-        const updatedComments = selectedComments.filter(comment => comment.cid !== cid);
-        setSelectedComments(updatedComments);
-        localStorage.setItem('comments', JSON.stringify(updatedComments));
-    }
-
     const newCommentActions = [
         {actionName: '취소', onAction: () => setIsWritingComment(false)},
-        {actionName: '저장', onAction: (comment) => saveComment(comment)},
+        {actionName: '저장', onAction: (comment) => {
+            saveComment(writer.wid, writer.username, did, comment);
+            setIsWritingComment(false);
+        }},
     ]
 
     const editCommentActions = [
         {actionName: '취소', onAction: () => setIsEditingComment(false)},
-        {actionName: '저장', onAction: (comment) => editComment(comment)},
+        {actionName: '저장', onAction: (comment) => {
+            editComment(comment);
+            setIsEditingComment(false);
+        }},
     ]
 
     return (
@@ -160,12 +113,13 @@ export const DocumentPage = ({
                             imgFileName={'delete.png'}
                             onclick={() => {
                                 deleteDocument(selectedDocument);
+                                const bid = selectedDocument.bid;
                                 navigate(`/boards/${bid}`);
                             }} 
                         />}
                 </ButtonsWrap>
                 <CommentList 
-                    comments={selectedComments}
+                    comments={comments}
                     onClickDelete={deleteComment}
                     onClickEdit={(comment) => {
                         setSelectedComment(comment);
