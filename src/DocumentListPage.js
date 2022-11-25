@@ -7,6 +7,8 @@ import styled from "styled-components";
 import { v4 as uuid } from 'uuid';
 import { NewDocument } from "./NewDocument";
 import { useWriter } from './hook-utils/hooks';
+import { useContext } from "react";
+import { DocumentsContext } from "./contexts/DocumentsContext";
 
 const DocumentListPageBase = styled.div`
     display: flex;
@@ -22,49 +24,30 @@ const DocumentListContainer = styled.div`
 `
 
 export const DocumentListPage = ({
-    documents,
-    setDocuments
 }) => {
-    const { writer, setWriter} = useWriter();
+    const { writer, setWriter } = useWriter();
     const { bid } = useParams();
     const [isWritingDocument, setIsWritingDocument] = useState(false);
+    const { documents, initDocuments, saveDocument, searchDocuments } = useContext(DocumentsContext);
 
     useEffect(() => {
-        let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
-        localStorageDocuments = (localStorageDocuments !== null)
-                                ? localStorageDocuments
-                                : initialDocuments
-        setDocuments(localStorageDocuments.filter(document => document.bid === bid));
+        initDocuments(bid);
     }, [bid]);
-
-    const saveDocument = (documentname, content) => {
-        const document = {
-            wid: writer.wid,
-            bid: bid,
-            did: uuid(),
-            documentname: documentname,
-            content: content,
-        }
-
-        setDocuments([...documents, document]);
-        localStorage.setItem('documents', JSON.stringify([...documents, document]));
-        setIsWritingDocument(false);
-    }
 
     return (
         <DocumentListPageBase>
             {isWritingDocument && 
                 <NewDocument
                     onClickCancel={() => setIsWritingDocument(false)}
-                    onClickSave={saveDocument}
+                    onClickSave={(documentname, content) => {
+                        saveDocument(writer.wid, bid, documentname, content);
+                        setIsWritingDocument(false);
+                    }}
             />}
             <DocumentListContainer>
                 <DocumentListHeader
                     onClickWrite={() => setIsWritingDocument(true)}
-                    onClickSearch={(searchText) => {
-                        const searchedDocuments = documents.filter(document => document.documentname.includes(searchText));
-                        setDocuments([...searchedDocuments]);
-                    }}
+                    onClickSearch={(searchText) => searchDocuments(searchText)}
                 />
                 <DocumentList 
                     documents={documents}

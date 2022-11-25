@@ -2,6 +2,7 @@ import './App.css';
 import { NavBar } from './NavBar';
 import { DocumentListPage } from './DocumentListPage';
 import { DocumentPage } from './DocumentPage';
+import { DocumentsProvider } from './DocumentsProvider';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { boards } from './data';
@@ -29,21 +30,21 @@ function App() {
     <>
       <MemoryRouter initialEntries={['/']}>
         <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} boards={boards} />
-        <Routes>
-          <Route path={'/'} element={<MainPage />}/>
-          <Route exact path={'/boards/:bid'} element={<DocumentListPage 
-              writer={writer} 
-              documents={documents}
-              setDocuments={setDocuments}
-            />} 
-          />
-          <Route exact path={'/documents/:did'} element={<DocumentPage 
-              writer={writer} 
-              documents={documents}
-              setDocuments={setDocuments}
-            />} 
-          />
-        </Routes>
+        <DocumentsProvider>
+          <Routes>
+              <Route path={'/'} element={<MainPage />}/>
+              <Route exact path={'/boards/:bid'} element={<DocumentListPage 
+                  writer={writer}
+                />} 
+              />
+              <Route exact path={'/documents/:did'} element={<DocumentPage 
+                  writer={writer} 
+                  documents={documents}
+                  setDocuments={setDocuments}
+                />} 
+              />
+          </Routes>
+        </DocumentsProvider>
       </MemoryRouter>
     </>
   );

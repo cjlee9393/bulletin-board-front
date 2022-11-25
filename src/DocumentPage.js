@@ -4,13 +4,14 @@ import { CommentList } from './CommentList';
 import { Button } from "./Button";
 import { documents as initialDocuments, comments as initialComments } from "./data";
 import styled from "styled-components";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NewComment } from './NewComment';
 import { v4 as uuid } from 'uuid';
 import { useWriter } from './hook-utils/hooks';
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { NewDocument } from "./NewDocument";
+import { DocumentsContext } from "./contexts/DocumentsContext";
 
 const DocumentPageBase = styled.div`
     display: flex;
@@ -39,6 +40,7 @@ export const DocumentPage = ({
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);
     const [isEditingDocument, setIsEditingDocument] = useState(false);
+    const { editDocument, deleteDocument } = useContext(DocumentsContext);
 
     let initialSelectedComments = JSON.parse(localStorage.getItem('comments'));
     initialSelectedComments = (initialSelectedComments !== null)
@@ -63,32 +65,6 @@ export const DocumentPage = ({
 
     const checkDocumentWriter = (writer, selectedDocument) => {
         return (writer.wid === selectedDocument.wid)
-    }
-
-    const editDocument = (documentname, content) => {
-        const updatedDocument = {
-            ...selectedDocument,
-            documentname: documentname,
-            content: content,
-        }
-
-        const updatedDocuments = documents.map(document => {
-            if (document.did === updatedDocument.did) return updatedDocument
-            
-            return document
-        })
-
-        setDocuments(updatedDocuments);
-        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
-        setIsEditingDocument(false);
-        navigate(`/documents/${did}`);
-    }
-
-    const deleteDocument = (selectedDocument) => {
-        const updatedDocuments = documents.filter(document => document.did != selectedDocument.did)
-        setDocuments(updatedDocuments);
-        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
-        navigate(`/boards/${bid}`);
     }
 
     const saveComment = (comment) => {
@@ -158,7 +134,10 @@ export const DocumentPage = ({
             {isEditingDocument &&
                 <NewDocument
                     onClickCancel={() => setIsEditingDocument(false)}
-                    onClickSave={(documentname, content) => editDocument(documentname, content)}
+                    onClickSave={(documentname, content) => {
+                        editDocument(selectedDocument, documentname, content);
+                        setIsEditingDocument(false);
+                    }}
                     document={selectedDocument}
                 />}
             <DocumentPageContainer>
@@ -179,7 +158,10 @@ export const DocumentPage = ({
                         <Button
                             buttonText={'삭제'}
                             imgFileName={'delete.png'}
-                            onclick={() => deleteDocument(selectedDocument)} 
+                            onclick={() => {
+                                deleteDocument(selectedDocument);
+                                navigate(`/boards/${bid}`);
+                            }} 
                         />}
                 </ButtonsWrap>
                 <CommentList 
