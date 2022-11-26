@@ -1,15 +1,11 @@
 import { useState } from "react";
-import { v4 as uuid } from 'uuid';
-
 import { CommentsContext } from "./contexts/CommentsContext";
-import { comments as initialComments } from "./data";
 import { getData, postData, patchData, deleteData } from "./api";
-
-const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
 
 export const CommentsProvider = ({ children }) => {
     // define state
     const [comments, setComments] = useState([]);
+    const auth_token = JSON.parse(localStorage.getItem('writer')).token_auth;
 
     // init comments
     const initComments = async (did) => {

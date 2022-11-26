@@ -4,6 +4,14 @@ import { createMemoryHistory } from 'history'
 import { renderWithContext } from './test-utils/renderers'
 import { getDocumentRouteDecorator } from './stories/decorators/RouteDecorator';
 
+localStorage.setItem('writer', JSON.stringify({
+    password: "password",
+    point: 1,
+    token_auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoyLCJ1c2VybmFtZSI6ImNqbGVlOTMiLCJwYXNzd29yZCI6InBhc3N3b3JkIiwicG9pbnQiOjF9LCJpYXQiOjE2Njk0MjU3MjN9.flPl6pbYNgxz_LXey0B94Wxdj9In1nexRb4SxDtGZcc",
+    username: "cjlee93",
+    wid: 2,
+}))
+
 test('Click on \'글쓰기\' button should show NewDocument component', () => {
     const bid = 1;
 

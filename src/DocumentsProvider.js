@@ -5,11 +5,10 @@ import { DocumentsContext } from "./contexts/DocumentsContext";
 import { documents as initialDocuments } from "./data";
 import { getData, postData, patchData, deleteData } from "./api";
 
-const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
-
 export const DocumentsProvider = ({ children }) => {
     // define state
     const [documents, setDocuments] = useState([]);
+    const auth_token = JSON.parse(localStorage.getItem('writer')).token_auth;
 
     // init documents
     const initDocuments = async (bid) => {

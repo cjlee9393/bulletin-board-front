@@ -7,8 +7,6 @@ import { useEffect } from "react";
 import { getData } from "./api";
 import { useState } from "react";
 
-const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
-
 const NavBarBase = styled.div`
     background-color: rgb(242, 162, 70);
     min-height: 60px;
@@ -82,7 +80,7 @@ export const NavBar = ({
     }
 
     useEffect(() => {
-        getData(`boards`, auth_token)
+        getData(`boards`, writer.token_auth)
         .then((data) => {
             console.log(data);
             setBoards(data);

@@ -7,7 +7,6 @@ import { CommentsProvider } from './CommentsProvider';
 import { WriterProvider } from './WriterProvider';
 
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
-import { boards } from './data';
 import { useEffect, useState } from 'react';
 import { Login } from './Login';
 import { MainPage } from './MainPage';

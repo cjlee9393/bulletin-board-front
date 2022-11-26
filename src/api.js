@@ -4,6 +4,7 @@ export async function getData(endpoint, auth_token) {
     const response = await fetch(baseUrl + endpoint, {
         method: 'GET',
         headers: {
+            "access-control-allow-origin" : "*",
             'Authorization': `Bearer ${auth_token}`,
         }
     });

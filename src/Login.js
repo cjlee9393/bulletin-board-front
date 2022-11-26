@@ -1,4 +1,3 @@
-import { useWriter } from "./hook-utils/hooks";
 import styled from "styled-components";
 import { writers as initialWriters } from "./data";
 import { useState } from "react";
@@ -7,6 +6,7 @@ import { FormBase, InputLabel, InputBase } from "./form-utils/forms";
 import { NewWriter } from "./NewWriter";
 import { useContext } from "react";
 import { WriterContext } from "./contexts/WriterContext";
+import { getData } from "./api";
 
 const LoginBase = styled.div`
     display: flex;
@@ -14,19 +14,18 @@ const LoginBase = styled.div`
     align-items: center;
 `
 
-export const authenticate = (username, password) => {
-    let localStorageWriters = JSON.parse(localStorage.getItem('writers'))
-    localStorageWriters = (localStorageWriters != null)
-                        ? localStorageWriters
-                        : initialWriters
+export const authenticate = async (username, password) => {
+    // send request and get response
+    const writer = await getData(`authenticate?username=${username}&password=${password}`);
 
-    for (let writer of localStorageWriters){
-        if (writer.username == username && writer.password == password){
-            return writer;
-        }
+    console.log(writer);
+
+    // if response null, alert and return false
+    if (writer != null){
+        return writer;
+    }else{
+        return false;
     }
-
-    return false;
 }
 
 export const Login = ({
@@ -37,13 +36,12 @@ export const Login = ({
     const {saveWriter} = useContext(WriterContext);
     const [isSiginingUp, setIsSigningUp] = useState(false);
 
-    const onClickLogin = (username, password) => {
-        const writer = authenticate(username, password);
+    const onClickLogin = async (username, password) => {
+        const writer = await authenticate(username, password);
 
         if (writer){
             saveWriter(writer);
             setIsLoggedIn(true);
-
         }else{
             alert('login failed');
         }
