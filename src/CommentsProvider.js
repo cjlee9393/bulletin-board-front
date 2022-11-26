@@ -3,81 +3,46 @@ import { v4 as uuid } from 'uuid';
 
 import { CommentsContext } from "./contexts/CommentsContext";
 import { comments as initialComments } from "./data";
+import { getData, postData, patchData, deleteData } from "./api";
+
+const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
 
 export const CommentsProvider = ({ children }) => {
     // define state
     const [comments, setComments] = useState([]);
 
     // init comments
-    const initComments = (did) => {
-        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
-        localStorageComments = (localStorageComments !== null)
-                                ? localStorageComments.filter(comment => comment.did === did)
-                                : initialComments.filter(comment => comment.did === did)
+    const initComments = async (did) => {
+        const comments = await getData(`comments/${did}`, auth_token);
         
-        setComments(localStorageComments);
+        setComments(comments);
     }
 
     // save comment
-    const saveComment = (wid, username, did, comment) => {
+    const saveComment = async (wid, username, did, comment) => {
         const newComment = {
             ...comment,
-            cid: uuid(),
             wid: wid,
             username: username,
             did: did,
         }
 
-        setComments([...comments, newComment]);
-
-        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
-        localStorageComments = (localStorageComments !== null)
-                 ? localStorageComments
-                 : initialComments;
-
-        localStorage.setItem('comments', JSON.stringify([...localStorageComments, newComment]));
+        await postData(`comments`, auth_token, newComment);
+        initComments(did);
     }
 
-
     // edit comment
-    const editComment = (updatedComment) => {
-        const updatedComments = comments.map(comment => {
-            if (comment.cid === updatedComment.cid){
-                return {...comment, ...updatedComment}
-            }
-
-            return comment;
-        })
-
-        setComments(updatedComments);
-
-        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
-        localStorageComments = (localStorageComments !== null)
-                 ? localStorageComments
-                 : initialComments;
-
-        const updatedLocalStorageComments = localStorageComments.map(comment => {
-            if (comment.cid === updatedComment.cid){
-                return {...comment, ...updatedComment}
-            }
-
-            return comment;
-        });
-        localStorage.setItem('comments', JSON.stringify(updatedLocalStorageComments));
+    const editComment = async (updatedComment) => {
+        await patchData(`comments/${updatedComment.cid}`, auth_token, updatedComment);
+        initComments(updatedComment.did);
     }
 
     // delete comment
-    const deleteComment = (cid) => {
-        const updatedComments = comments.filter(comment => comment.cid !== cid);
-        setComments(updatedComments);
+    const deleteComment = async (cid) => {
+        const did = comments.find(comment => comment.cid == cid).did;
 
-        let localStorageComments = JSON.parse(localStorage.getItem('comments'));
-        localStorageComments = (localStorageComments !== null)
-                 ? localStorageComments
-                 : initialComments;
-
-        const updatedLocalStorageComments = localStorageComments.filter(comment => comment.cid !== cid);
-        localStorage.setItem('comments', JSON.stringify(updatedLocalStorageComments));
+        await deleteData(`comments?cid=${cid}`, auth_token);
+        initComments(did);
     }
 
     return (

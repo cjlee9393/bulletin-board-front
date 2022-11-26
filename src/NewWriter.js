@@ -13,7 +13,7 @@ export const NewWriter = ({
     const [passwordRepeat, setPasswordRepeat] = useState();
 
     const checkPasswordRepeat = (password, passwordRepeat) => {
-        return (password === passwordRepeat)
+        return (password == passwordRepeat)
     }
 
     const saveWriter = (writer) => {

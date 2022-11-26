@@ -1,9 +1,13 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button } from './Button';
-import { useWriter } from "./hook-utils/hooks";
 import { useContext } from "react";
 import { WriterContext } from "./contexts/WriterContext";
+import { useEffect } from "react";
+import { getData } from "./api";
+import { useState } from "react";
+
+const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
 
 const NavBarBase = styled.div`
     background-color: rgb(242, 162, 70);
@@ -61,11 +65,12 @@ const ImgWrap = styled.div`
 `
 
 export const NavBar = ({
-    boards,
     setIsLoggedIn = () => {},
 }) => {
     const navigate = useNavigate();
     const {writer, saveWriter} = useContext(WriterContext);
+    const [isLoading, setIsLoading] = useState(true);
+    const [boards, setBoards] = useState([]);
 
     let isLoggedIn = (writer !== null);
 
@@ -75,6 +80,15 @@ export const NavBar = ({
         isLoggedIn = false;
         navigate(['/']);
     }
+
+    useEffect(() => {
+        getData(`boards`, auth_token)
+        .then((data) => {
+            console.log(data);
+            setBoards(data);
+            setIsLoading(false);
+        })
+    }, [])
 
     return (
         <NavBarBase>
@@ -91,13 +105,14 @@ export const NavBar = ({
                     <TextBottom>{'컴퍼니픽'}</TextBottom>
                 </TextBox>
             </ImgWrap>
-            <BoardsContainer>
-                {boards.map(board => (
-                    <BoardWrap key={board.bid} onClick={() => navigate(`/boards/${board.bid}`)}>
-                        {board.boardname}
-                    </BoardWrap>
-                ))}
-            </BoardsContainer>
+            {!isLoading && 
+                <BoardsContainer>
+                    {boards.map(board => (
+                        <BoardWrap key={board.bid} onClick={() => navigate(`/boards/${board.bid}`)}>
+                            {board.boardname}
+                        </BoardWrap>
+                    ))}
+                </BoardsContainer>}
             {isLoggedIn && <Button buttonText={'로그아웃'} imgFileName={'logout.png'} onclick={() => onClickLogout()} />}
 
         </NavBarBase>

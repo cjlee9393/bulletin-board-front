@@ -3,34 +3,27 @@ import { v4 as uuid } from 'uuid';
 
 import { DocumentsContext } from "./contexts/DocumentsContext";
 import { documents as initialDocuments } from "./data";
+import { getData, postData, patchData, deleteData } from "./api";
+
+const auth_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ3cml0ZXIiOnsid2lkIjoxMiwidXNlcm5hbWUiOiJuZXdDamxlZTkzIiwicGFzc3dvcmQiOiJwYXNzd29yZCIsInBvaW50IjowfSwiaWF0IjoxNjY3NDQ4Nzg3fQ.LywzkBQRtJppqkOPEfHV-Tf1zE9-rL871HYhTMgDyI4"
 
 export const DocumentsProvider = ({ children }) => {
     // define state
     const [documents, setDocuments] = useState([]);
 
     // init documents
-    const initDocuments = (bid) => {
-        let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
-        localStorageDocuments = (localStorageDocuments !== null)
-                                ? localStorageDocuments
-                                : initialDocuments
+    const initDocuments = async (bid) => {
+        const documents = await getData(`documents/${bid}`, auth_token)
         
-        setDocuments(
-            localStorageDocuments.filter(document => document.bid === bid)
-        )
+        setDocuments(documents);
     }
 
     const selectDocument = (did) => {
-        let localStorageDocuments = JSON.parse(localStorage.getItem('documents'));
-        localStorageDocuments = (localStorageDocuments !== null)
-                                ? localStorageDocuments
-                                : initialDocuments
-
-        return localStorageDocuments.find(document => document.did === did)
+        return documents.find(document => document.did == did)
     }
 
     // save documents
-    const saveDocument = (wid, bid, documentname, content) => {
+    const saveDocument = async (wid, bid, documentname, content) => {
         const document = {
             wid: wid,
             bid: bid,
@@ -38,10 +31,9 @@ export const DocumentsProvider = ({ children }) => {
             documentname: documentname,
             content: content,
         }
-
-        setDocuments([...documents, document]);
         
-        localStorage.setItem('documents', JSON.stringify([...documents, document]));
+        await postData('documents', auth_token, document);
+        initDocuments(bid);
     }
 
     // search documents
@@ -52,28 +44,23 @@ export const DocumentsProvider = ({ children }) => {
     }
 
     // edit documents
-    const editDocument = (selectedDocument, documentname, content) => {
+    const editDocument = async (selectedDocument, documentname, content) => {
         const updatedDocument = {
             ...selectedDocument,
             documentname: documentname,
             content: content,
         }
 
-        const updatedDocuments = documents.map(document => {
-            if (document.did === updatedDocument.did) return updatedDocument
-            
-            return document
-        })
-
-        setDocuments(updatedDocuments);
-        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
+        await patchData(`documents/${updatedDocument.did}`, auth_token, updatedDocument);
+        initDocuments(updatedDocument.bid);
     }
 
     // delete documents
-    const deleteDocument = (selectedDocument) => {
-        const updatedDocuments = documents.filter(document => document.did != selectedDocument.did)
-        setDocuments(updatedDocuments);
-        localStorage.setItem('documents', JSON.stringify(updatedDocuments));
+    const deleteDocument = async (selectedDocument) => {
+        const bid = documents.find(document => document.did == selectedDocument.did).bid
+        
+        await deleteData(`documents?did=${selectedDocument.did}`, auth_token);
+        initDocuments(bid);
     }
 
     return (

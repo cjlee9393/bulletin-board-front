@@ -44,16 +44,18 @@ export const DocumentPage = ({
     const [isWritingComment, setIsWritingComment] = useState(false);
     const [isEditingComment, setIsEditingComment] = useState(false);
     const [isEditingDocument, setIsEditingDocument] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [selectedComment, setSelectedComment] = useState({});
     const selectedDocument = selectDocument(did);
 
     useEffect(() => {
-        initComments(did);
+        initComments(did)
+        .then(() => setIsLoading(false));
     }, [did]);
 
     const checkDocumentWriter = (writer, selectedDocument) => {
-        return (writer.wid === selectedDocument.wid)
+        return (writer.wid == selectedDocument.wid)
     }
 
     const newCommentActions = [
@@ -72,61 +74,63 @@ export const DocumentPage = ({
         }},
     ]
 
-    return (
-        <DocumentPageBase>
-            {isWritingComment && 
-                <NewComment 
-                    actions={newCommentActions}
-                    comment={{}}
-                />}
-            {isEditingComment && 
-                <NewComment 
-                    actions={editCommentActions}
-                    comment={selectedComment}
-                />}
-            {isEditingDocument &&
-                <NewDocument
-                    onClickCancel={() => setIsEditingDocument(false)}
-                    onClickSave={(documentname, content) => {
-                        editDocument(selectedDocument, documentname, content);
-                        setIsEditingDocument(false);
-                    }}
-                    document={selectedDocument}
-                />}
-            <DocumentPageContainer>
-                <Document document={selectedDocument} />
-                <ButtonsWrap>
-                    <Button 
-                        buttonText={'댓글쓰기'}
-                        imgFileName={'write.png'}
-                        onclick={() => setIsWritingComment(true)} 
-                    />
-                    {checkDocumentWriter(writer, selectedDocument) &&
+    return isLoading
+        ? <h1>loading...</h1>
+        : (
+            <DocumentPageBase>
+                {isWritingComment && 
+                    <NewComment 
+                        actions={newCommentActions}
+                        comment={{}}
+                    />}
+                {isEditingComment && 
+                    <NewComment 
+                        actions={editCommentActions}
+                        comment={selectedComment}
+                    />}
+                {isEditingDocument &&
+                    <NewDocument
+                        onClickCancel={() => setIsEditingDocument(false)}
+                        onClickSave={(documentname, content) => {
+                            editDocument(selectedDocument, documentname, content);
+                            setIsEditingDocument(false);
+                        }}
+                        document={selectedDocument}
+                    />}
+                <DocumentPageContainer>
+                    <Document document={selectedDocument} />
+                    <ButtonsWrap>
                         <Button 
-                            buttonText={'수정'}
-                            imgFileName={'edit.png'}
-                            onclick={() => setIsEditingDocument(true)} 
-                        />}
-                    {checkDocumentWriter(writer, selectedDocument) && 
-                        <Button
-                            buttonText={'삭제'}
-                            imgFileName={'delete.png'}
-                            onclick={() => {
-                                deleteDocument(selectedDocument);
-                                const bid = selectedDocument.bid;
-                                navigate(`/boards/${bid}`);
-                            }} 
-                        />}
-                </ButtonsWrap>
-                <CommentList 
-                    comments={comments}
-                    onClickDelete={deleteComment}
-                    onClickEdit={(comment) => {
-                        setSelectedComment(comment);
-                        setIsEditingComment(true);
-                    }}
-                />
-            </DocumentPageContainer>
-        </DocumentPageBase>
-    )
+                            buttonText={'댓글쓰기'}
+                            imgFileName={'write.png'}
+                            onclick={() => setIsWritingComment(true)} 
+                        />
+                        {checkDocumentWriter(writer, selectedDocument) &&
+                            <Button 
+                                buttonText={'수정'}
+                                imgFileName={'edit.png'}
+                                onclick={() => setIsEditingDocument(true)} 
+                            />}
+                        {checkDocumentWriter(writer, selectedDocument) && 
+                            <Button
+                                buttonText={'삭제'}
+                                imgFileName={'delete.png'}
+                                onclick={() => {
+                                    deleteDocument(selectedDocument);
+                                    const bid = selectedDocument.bid;
+                                    navigate(`/boards/${bid}`);
+                                }} 
+                            />}
+                    </ButtonsWrap>
+                    <CommentList 
+                        comments={comments}
+                        onClickDelete={deleteComment}
+                        onClickEdit={(comment) => {
+                            setSelectedComment(comment);
+                            setIsEditingComment(true);
+                        }}
+                    />
+                </DocumentPageContainer>
+            </DocumentPageBase>
+        )
 }

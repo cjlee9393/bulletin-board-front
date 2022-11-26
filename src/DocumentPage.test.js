@@ -9,7 +9,7 @@ localStorage.setItem('writer', JSON.stringify(writers[0]));
 
 test('DocumentPage should get did from URL and display corresponding document', () => {
     const did = '1';
-    const targetDocumentText = documents.find(document => document.did === did).content;
+    const targetDocumentText = documents.find(document => document.did == did).content;
 
     renderWithContext(
         <MemoryRouter initialEntries={[`/documents/${did}`]}>
@@ -25,7 +25,7 @@ test('DocumentPage should get did from URL and display corresponding document', 
 
 test('DocumentPage should get did from URL and display corresponding comments', () => {
     const did = '1';
-    const targetCommentText = comments.find(comment => comment.did === did).content;
+    const targetCommentText = comments.find(comment => comment.did == did).content;
 
     renderWithContext(
         <MemoryRouter initialEntries={[`/documents/${did}`]}>
@@ -41,7 +41,7 @@ test('DocumentPage should get did from URL and display corresponding comments', 
 
 test('click on delete button removes comment from screen', () => {
     const did = '1';
-    const targetCommentText = comments.find(comment => comment.did === did).content;
+    const targetCommentText = comments.find(comment => comment.did == did).content;
 
     renderWithContext(
         <MemoryRouter initialEntries={[`/documents/${did}`]}>
@@ -63,7 +63,7 @@ test('click on delete button removes comment from screen', () => {
 
 test('click on delete button removes comment from local storage', () => {
     const did = '1';
-    const targetCommentText = comments.find(comment => comment.did === did).content;
+    const targetCommentText = comments.find(comment => comment.did == did).content;
 
     renderWithContext(
         <MemoryRouter initialEntries={[`/documents/${did}`]}>
@@ -86,7 +86,7 @@ test('click on delete button removes comment from local storage', () => {
     }
 })
 
-test('write new comment display and save to localStorage the new comment', () => {
+test('write new comment display the new comment', () => {
     const did = '1';
     localStorage.setItem('writer', JSON.stringify(writers[0]));
     
@@ -104,11 +104,6 @@ test('write new comment display and save to localStorage the new comment', () =>
 
     fireEvent.change(contentInputElement, {target: { value: '새로운 댓글' }});
     fireEvent.click(screen.getByText('저장'));
-
-    const comments = JSON.parse(localStorage.getItem('comments'));
-    const comment = comments.find(comment => comment.content.localeCompare('새로운 댓글') === 0);
-
-    expect(comment.content).toMatch(/새로운 댓글/i);
 
     expect(screen.getByText('새로운 댓글')).toBeInTheDocument();
 })
@@ -135,7 +130,7 @@ test('write edit comment display and save to localStorage the edited comment', (
 
     const comments = JSON.parse(localStorage.getItem('comments'));
 
-    const comment = comments.find(comment => comment.content.localeCompare('수정된 댓글') === 0);
+    const comment = comments.find(comment => comment.content.localeCompare('수정된 댓글') == 0);
 
     expect(comment.content).toMatch(/수정된 댓글/i);
     expect(screen.getByText('수정된 댓글')).toBeInTheDocument();

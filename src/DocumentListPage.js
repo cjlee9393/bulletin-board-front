@@ -27,31 +27,35 @@ export const DocumentListPage = ({
     const { writer } = useContext(WriterContext);
     const { bid } = useParams();
     const [isWritingDocument, setIsWritingDocument] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const { documents, initDocuments, saveDocument, searchDocuments } = useContext(DocumentsContext);
 
     useEffect(() => {
-        initDocuments(bid);
+        initDocuments(bid)
+        .then(() => setIsLoading(false));
     }, [bid]);
 
-    return (
-        <DocumentListPageBase>
-            {isWritingDocument && 
-                <NewDocument
-                    onClickCancel={() => setIsWritingDocument(false)}
-                    onClickSave={(documentname, content) => {
-                        saveDocument(writer.wid, bid, documentname, content);
-                        setIsWritingDocument(false);
-                    }}
-            />}
-            <DocumentListContainer>
-                <DocumentListHeader
-                    onClickWrite={() => setIsWritingDocument(true)}
-                    onClickSearch={(searchText) => searchDocuments(searchText)}
-                />
-                <DocumentList 
-                    documents={documents}
-                />
-            </DocumentListContainer>
-        </DocumentListPageBase>
-    )
+    return isLoading 
+        ? (<h1>Loading...</h1>)
+        : (
+            <DocumentListPageBase>
+                {isWritingDocument && 
+                    <NewDocument
+                        onClickCancel={() => setIsWritingDocument(false)}
+                        onClickSave={(documentname, content) => {
+                            saveDocument(writer.wid, bid, documentname, content);
+                            setIsWritingDocument(false);
+                        }}
+                />}
+                <DocumentListContainer>
+                    <DocumentListHeader
+                        onClickWrite={() => setIsWritingDocument(true)}
+                        onClickSearch={(searchText) => searchDocuments(searchText)}
+                    />
+                    <DocumentList 
+                        documents={documents}
+                    />
+                </DocumentListContainer>
+            </DocumentListPageBase>
+        )
 }

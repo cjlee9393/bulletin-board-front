@@ -21,7 +21,7 @@ export const authenticate = (username, password) => {
                         : initialWriters
 
     for (let writer of localStorageWriters){
-        if (writer.username === username && writer.password === password){
+        if (writer.username == username && writer.password == password){
             return writer;
         }
     }

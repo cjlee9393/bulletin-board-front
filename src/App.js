@@ -34,7 +34,7 @@ function App() {
         <WriterProvider>
         <CommentsProvider>
         <DocumentsProvider>
-          <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} boards={boards} />
+          <NavBar isLoggedIn={false} setIsLoggedIn={setIsLoggedIn} />
           <Routes>
               <Route path={'/'} element={<MainPage />}/>
               <Route exact path={'/boards/:bid'} element={<DocumentListPage 

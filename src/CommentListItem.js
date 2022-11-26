@@ -37,7 +37,7 @@ export const CommentListItem = ({
 }) => {    
     const {writer} = useContext(WriterContext);
     const checkCommentWriter = (writer, comment) => {
-        return (writer.wid === comment.wid)
+        return (writer.wid == comment.wid)
     }
 
     return (
